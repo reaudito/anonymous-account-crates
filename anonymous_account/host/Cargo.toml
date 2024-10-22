@@ -10,3 +10,5 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 serde = "1.0"
 subxt = "0.37.0"
 subxt-signer = "0.37.0"
+sp-io = "38.0.0"
+sp-core = "34.0.0"
