@@ -13,7 +13,7 @@ fn update_hash_incrementally(current_hash: [u8; 32], account_id: &AccountId32) -
     blake2_256(&input_data)
 }
 
-pub fn keypair_func() {
+pub fn keypair_func() -> (Vec<AccountId32>, [u8; 32]) {
     let mut phrases = Vec::new();
     phrases.push("bottom drive obey lake curtain smoke basket hold race lonely fit walk");
     phrases.push("demand toy recycle symptom this arrow pear ribbon orchard large cabin tower");
@@ -36,4 +36,6 @@ pub fn keypair_func() {
     }
 
     println!("current_hash:{:?}", current_hash);
+
+    (account_addresses, current_hash)
 }

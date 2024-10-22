@@ -23,12 +23,10 @@ fn main() {
     // ExecutorEnvBuilder::build().
 
     // For example:
-    let input: u32 = 15 * u32::pow(2, 27) + 1;
-
-    keypair_func();
+    let (account_addresses, hash) = keypair_func();
 
     let env = ExecutorEnv::builder()
-        .write(&input)
+        .write(&(account_addresses, hash))
         .unwrap()
         .build()
         .unwrap();
@@ -46,7 +44,9 @@ fn main() {
     // TODO: Implement code for retrieving receipt journal here.
 
     // For example:
-    let _output: u32 = receipt.journal.decode().unwrap();
+    let output: [u8; 32] = receipt.journal.decode().unwrap();
+
+    println!("output: {:?}", output);
 
     // The receipt was verified at the end of proving, but the below code is an
     // example of how someone else could verify this receipt.
