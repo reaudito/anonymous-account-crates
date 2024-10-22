@@ -1,5 +1,5 @@
 use sp_io::hashing::blake2_256;
-use subxt::config::substrate::AccountId32;
+use subxt_core::utils::AccountId32;
 use subxt_signer::{bip39::Mnemonic, sr25519::Keypair};
 
 fn update_hash_incrementally(current_hash: [u8; 32], account_id: &AccountId32) -> [u8; 32] {
