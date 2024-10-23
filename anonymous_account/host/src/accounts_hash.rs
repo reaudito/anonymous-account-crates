@@ -1,6 +1,20 @@
+use serde::{Deserialize, Serialize};
 use sp_io::hashing::blake2_256;
 use subxt_core::utils::AccountId32;
-use subxt_signer::{bip39::Mnemonic, sr25519::Keypair};
+use subxt_signer::{
+    bip39::Mnemonic,
+    sr25519::{Keypair, Signature},
+};
+
+#[derive(Serialize, Deserialize)]
+pub struct AccountData {
+    pub account_addresses: Vec<AccountId32>,
+    pub current_hash: [u8; 32],
+    pub index: usize,
+    pub public_key_of_account: [u8; 32],
+    pub signature: Vec<u8>, // Use Vec<u8> instead of [u8; 64]
+    pub password: String,
+}
 
 fn update_hash_incrementally(current_hash: [u8; 32], account_id: &AccountId32) -> [u8; 32] {
     let mut input_data = Vec::new();
@@ -13,7 +27,7 @@ fn update_hash_incrementally(current_hash: [u8; 32], account_id: &AccountId32) -
     blake2_256(&input_data)
 }
 
-pub fn keypair_func() -> (Vec<AccountId32>, [u8; 32]) {
+pub fn keypair_func() -> AccountData {
     let mut phrases = Vec::new();
     phrases.push("bottom drive obey lake curtain smoke basket hold race lonely fit walk");
     phrases.push("demand toy recycle symptom this arrow pear ribbon orchard large cabin tower");
@@ -23,7 +37,7 @@ pub fn keypair_func() -> (Vec<AccountId32>, [u8; 32]) {
     phrases.push("figure husband please idea captain bulk despair over letter code art mimic");
     phrases.push("regret family similar face thumb magic head team duty web side strike");
     phrases.push("resemble timber picnic stage must video amount price sport help good stable");
-
+    let phrases_clone = phrases.clone();
     let mut account_addresses = Vec::new();
     let mut current_hash: [u8; 32] = [0; 32];
     for phrase in phrases {
@@ -37,5 +51,26 @@ pub fn keypair_func() -> (Vec<AccountId32>, [u8; 32]) {
 
     println!("current_hash:{:?}", current_hash);
 
-    (account_addresses, current_hash)
+    let index = 2;
+
+    let phrase_of_index = phrases_clone[index];
+    let mnemonic = Mnemonic::parse(phrase_of_index).unwrap();
+    let keypair = Keypair::from_phrase(&mnemonic, None).unwrap();
+
+    let public_key_of_account = keypair.public_key().0;
+
+    let password = "Hello there".to_owned();
+
+    let signature = keypair.sign(password.as_bytes());
+
+    let signature_array = signature.0.to_vec();
+
+    AccountData {
+        account_addresses: account_addresses,
+        current_hash: current_hash,
+        index: index,
+        public_key_of_account: public_key_of_account,
+        signature: signature_array,
+        password: password,
+    }
 }

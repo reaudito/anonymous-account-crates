@@ -23,10 +23,10 @@ fn main() {
     // ExecutorEnvBuilder::build().
 
     // For example:
-    let (account_addresses, hash) = keypair_func();
+    let account_data = keypair_func();
 
     let env = ExecutorEnv::builder()
-        .write(&(account_addresses, hash))
+        .write(&account_data)
         .unwrap()
         .build()
         .unwrap();
