@@ -1,10 +1,7 @@
 use serde::{Deserialize, Serialize};
 use sp_io::hashing::blake2_256;
 use subxt_core::utils::AccountId32;
-use subxt_signer::{
-    bip39::Mnemonic,
-    sr25519::{Keypair, Signature},
-};
+use subxt_signer::{bip39::Mnemonic, sr25519::Keypair};
 
 #[derive(Serialize, Deserialize)]
 pub struct AccountData {
