@@ -22,3 +22,13 @@ pub fn update_hash_incrementally(current_hash: [u8; 32], account_id: &AccountId3
     // Recalculate the hash with the new account ID
     blake2_256(&input_data)
 }
+
+pub fn password_hash_fn(index: usize, password: String) -> [u8; 32] {
+    // Convert the index to bytes (using 8 bytes to represent usize)
+    let mut index_bytes = index.to_le_bytes().to_vec();
+
+    // Convert the password string to bytes and append to index bytes
+    index_bytes.extend(password.as_bytes());
+    // Hash the combined data using blake2_256
+    blake2_256(&index_bytes)
+}

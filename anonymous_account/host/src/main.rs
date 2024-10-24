@@ -44,9 +44,11 @@ fn main() {
     // TODO: Implement code for retrieving receipt journal here.
 
     // For example:
-    let output: [u8; 32] = receipt.journal.decode().unwrap();
+    let (output, password_hash): ([u8; 32], [u8; 32]) = receipt.journal.decode().unwrap();
 
     println!("output: {:?}", output);
+
+    println!("password hash: {:?}", password_hash);
 
     // The receipt was verified at the end of proving, but the below code is an
     // example of how someone else could verify this receipt.

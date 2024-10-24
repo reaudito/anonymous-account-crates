@@ -56,10 +56,11 @@ pub fn keypair_func() -> AccountData {
 
     let public_key_of_account = keypair.public_key().0;
 
-    let password = "Hello there".to_owned();
+    let password = "password-signature".to_owned();
 
     let signature = keypair.sign(password.as_bytes());
 
+    // Make the signature public in blockchain, so that person can't enter another password
     let signature_array = signature.0.to_vec();
 
     AccountData {

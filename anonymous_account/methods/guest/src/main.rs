@@ -1,4 +1,6 @@
-use guest_anonymous_account::accounts_hash::{update_hash_incrementally, AccountData};
+use guest_anonymous_account::accounts_hash::{
+    password_hash_fn, update_hash_incrementally, AccountData,
+};
 use risc0_zkvm::guest::env;
 use subxt_signer::sr25519;
 use subxt_signer::sr25519::{PublicKey, Signature};
@@ -15,7 +17,6 @@ fn main() {
 
     assert_eq!(current_hash, account_data.current_hash);
     // assert_ne!(current_hash, hash);
-    //
 
     let public_key_of_account = PublicKey(account_data.public_key_of_account);
 
@@ -37,13 +38,16 @@ fn main() {
     // // let account_address_of_your_account = keypair.public_key().to_account_id();
 
     assert_eq!(account_addresses[account_data.index], your_account_id);
-
+    let password = account_data.password.as_bytes();
+    let password_string = account_data.password.clone();
     assert!(sr25519::verify(
         &signature_of_account,
-        account_data.password.as_bytes(),
+        password,
         &public_key_of_account2
     ));
 
+    let password_hash = password_hash_fn(account_data.index, password_string);
+
     // write public output to the journal
-    env::commit(&current_hash);
+    env::commit(&(current_hash, password_hash));
 }
