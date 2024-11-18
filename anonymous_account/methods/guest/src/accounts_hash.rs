@@ -12,6 +12,18 @@ pub struct AccountData {
     pub password: String,
 }
 
+pub fn calculate_hash_for_accounts(accounts: &[AccountId32]) -> [u8; 32] {
+    let mut input_data = Vec::new();
+
+    // Concatenate all account IDs into a single byte vector
+    for account in accounts {
+        input_data.extend_from_slice(account.as_ref());
+    }
+
+    // Compute the hash of the combined data
+    blake2_256(&input_data)
+}
+
 pub fn update_hash_incrementally(current_hash: [u8; 32], account_id: &AccountId32) -> [u8; 32] {
     let mut input_data = Vec::new();
 

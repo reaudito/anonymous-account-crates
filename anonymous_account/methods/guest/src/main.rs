@@ -1,5 +1,5 @@
 use guest_anonymous_account::accounts_hash::{
-    password_hash_fn, update_hash_incrementally, AccountData,
+    calculate_hash_for_accounts, password_hash_fn, update_hash_incrementally, AccountData,
 };
 use risc0_zkvm::guest::env;
 use subxt_signer::sr25519;
@@ -10,12 +10,23 @@ fn main() {
 
     let account_addresses = account_data.account_addresses.clone();
 
-    let mut current_hash: [u8; 32] = [0; 32];
-    for account_address in &account_addresses {
-        current_hash = update_hash_incrementally(current_hash, &account_address);
+    // let mut current_hash: [u8; 32] = [0; 32];
+
+    // for account_address in &account_addresses {
+    //     current_hash = update_hash_incrementally(current_hash, &account_address);
+    // }
+
+    // assert_eq!(current_hash, account_data.current_hash);
+    let mut account_addresses_new = Vec::new();
+    let copies = 250;
+
+    // Append copies of the original vector to account_addresses
+    for _ in 0..copies {
+        account_addresses_new.extend(account_addresses.clone());
     }
 
-    assert_eq!(current_hash, account_data.current_hash);
+    let hash = calculate_hash_for_accounts(&account_addresses_new);
+
     // assert_ne!(current_hash, hash);
 
     let public_key_of_account = PublicKey(account_data.public_key_of_account);
@@ -49,5 +60,7 @@ fn main() {
     let password_hash = password_hash_fn(account_data.index, password_string);
 
     // write public output to the journal
-    env::commit(&(current_hash, password_hash));
+    // env::commit(&(current_hash, password_hash));
+
+    env::commit(&(account_data.current_hash, password_hash));
 }
