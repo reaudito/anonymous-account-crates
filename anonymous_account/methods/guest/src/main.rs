@@ -19,7 +19,11 @@ fn main() {
     let public_key_of_account2 = PublicKey(account_data.public_key_of_account);
 
     // Ensure the Vec<u8> has exactly 64 bytes and convert it to [u8; 64]
-    let signature_array: [u8; 64] = account_data.signature.0;
+    let signature_array: [u8; 64] = account_data.account_addresses[account_data.index]
+        .1
+        .clone()
+        .try_into()
+        .expect("Invalid length: Vec<u8> must be 64 bytes to convert to Signature");
 
     // Create a Signature from the [u8; 64] array
     let signature_of_account = Signature(signature_array);

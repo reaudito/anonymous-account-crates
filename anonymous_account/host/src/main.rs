@@ -52,9 +52,9 @@ fn main() {
     // TODO: Implement code for retrieving receipt journal here.
 
     // For example:
-    let (output, password_hash): ([u8; 32], [u8; 32]) = receipt.journal.decode().unwrap();
+    let (account_hash, password_hash): ([u8; 32], [u8; 32]) = receipt.journal.decode().unwrap();
 
-    println!("output: {:?}", output);
+    println!("account hash: {:?}", account_hash);
 
     println!("password hash: {:?}", password_hash);
 
@@ -62,7 +62,7 @@ fn main() {
     // example of how someone else could verify this receipt.
     receipt.verify(GUEST_ANONYMOUS_ACCOUNT_ID).unwrap();
 
-    println!("image id: {:?}", GUEST_ANONYMOUS_ACCOUNT_ID);
+    // println!("image id: {:?}", GUEST_ANONYMOUS_ACCOUNT_ID);
 
     let duration = start.elapsed();
 
