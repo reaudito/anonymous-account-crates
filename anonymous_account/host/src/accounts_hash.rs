@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use sha2::{Digest, Sha256};
 use sp_io::hashing::blake2_256;
 use subxt_core::utils::AccountId32;
 use subxt_signer::{bip39::Mnemonic, sr25519::Keypair};
@@ -13,6 +14,22 @@ pub struct AccountData {
 }
 
 pub fn calculate_hash_for_accounts(accounts: &[(AccountId32, Vec<u8>)]) -> [u8; 32] {
+    let mut hasher = Sha256::new();
+    let mut input_data = Vec::new();
+
+    // Concatenate all account IDs and ByteArray64 contents into a single byte vector
+    for account in accounts {
+        input_data.extend_from_slice(account.0.as_ref()); // AccountId32 as bytes
+        input_data.extend_from_slice(account.1.as_ref());
+    }
+    hasher.update(&input_data);
+    // Compute the hash of the combined data
+    let hash = hasher.finalize();
+    let hash_bytes: [u8; 32] = hash.into(); // Convert to [u8; 32]
+    hash_bytes
+}
+
+pub fn calculate_hash_for_accounts2(accounts: &[(AccountId32, Vec<u8>)]) -> [u8; 32] {
     let mut input_data = Vec::new();
 
     // Concatenate all account IDs and ByteArray64 contents into a single byte vector

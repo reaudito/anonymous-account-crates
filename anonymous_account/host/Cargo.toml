@@ -13,3 +13,7 @@ subxt-signer = "0.37.0"
 sp-io = "38.0.0"
 sp-core = "34.0.0"
 subxt-core = "0.37.0"
+
+[dependencies.sha2]
+git = "https://github.com/risc0/RustCrypto-hashes"
+tag = "sha2-v0.10.6-risczero.0"
